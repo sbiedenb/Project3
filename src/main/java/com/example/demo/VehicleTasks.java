@@ -4,6 +4,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Component
@@ -17,6 +19,8 @@ public class VehicleTasks {
     int maxPrice = 45000;
     int minPrice = 15000;
 
+    @Log
+    @Timed
     @Scheduled(cron = "*/2 * * * * *")
     public void addVehicle(){
         String url = "http://localhost:8080/addvehicle";
@@ -24,16 +28,20 @@ public class VehicleTasks {
                 rand.nextInt((maxYear - minYear) + 1) + minYear,
                 rand.nextInt((maxPrice - minPrice) + 1) + minPrice),
                 Vehicle.class);
-        System.out.println("Vehicle Added...");
+        //System.out.println("Vehicle Added...");
     }
 
+    @Log
+    @Timed
     @Scheduled(cron="9/10 * * * * *")
     public void deleteVehicle(){
         String url = "http://localhost:8080/deletevehicle/{id}";
         template.delete(url,rand.nextInt(rand.nextInt(40)+40));
-        System.out.println("Vehicle Deleted...");
+        //System.out.println("Vehicle Deleted...");
     }
 
+    @Log
+    @Timed
     @Scheduled(cron = "7/10 * * * * *")
     public void updateVehicle(){
         String url = "http://localhost:8080/updatevehicle";
@@ -42,6 +50,12 @@ public class VehicleTasks {
                 rand.nextInt((maxPrice - minPrice) + 1) + minPrice);
         vehicle.setId(rand.nextInt(40)+40);
         template.put(url, vehicle, Vehicle.class);
-        System.out.println("Vehicle Updated...");
+        //System.out.println("Vehicle Updated...");
+    }
+
+    @Scheduled(cron = "*/20 * * * * *")
+    public void getTenVehicles(){
+        String url = "http://localhost:8080/tenvehicles/{start}";
+        template.getForObject(url, ArrayList.class,rand.nextInt(20)+80);
     }
 }

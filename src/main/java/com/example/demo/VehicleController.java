@@ -40,4 +40,13 @@ public class VehicleController {
         vehicleDao.deleteById(id);
     }
 
+    @Table
+    @RequestMapping(value = "/tenvehicles/{start}", method = RequestMethod.GET)
+    public void tenVehicles(@PathVariable("start") int start)throws IOException{
+        List<Vehicle> vehicles = vehicleDao.getTen(start);
+        for(int i=0;i<vehicles.size();i++){
+            System.out.println(vehicles.get(i).toString());
+        }
+    }
+
 }

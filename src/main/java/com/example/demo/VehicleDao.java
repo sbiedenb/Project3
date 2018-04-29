@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -20,6 +22,14 @@ public class VehicleDao {
 
     public Vehicle getById(int id){
         return entityManager.find(Vehicle.class,id);
+    }
+
+    public List<Vehicle> getTen(int start){
+        List<Vehicle> vehicles = new ArrayList<Vehicle>();
+        for(int i=start;i<(start+11);i++){
+            vehicles.add(entityManager.find(Vehicle.class,i));
+        }
+        return vehicles;
     }
 
     public void deleteById(int id) {
